@@ -680,7 +680,7 @@ export default function Home() {
                           <img src="/cnsc-logo.png" alt="CNSC" className="w-full h-full object-contain" />
                         </div>
                         <div>
-                          <h4 className="text-base font-bold text-slate-950 dark:text-white leading-snug">University of Camarines Norte State</h4>
+                          <h4 className="text-base font-bold text-slate-950 dark:text-white leading-snug">University of Camarines Norte</h4>
                           <p className="text-sm font-semibold text-[#D4A017] dark:text-[#D4A017] mt-0.5">Bachelor of Science in Information Technology</p>
                           <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 mt-1">GWA: <span className="text-[#D4A017] dark:text-[#D4A017] font-bold">1.6</span></p>
                         </div>
