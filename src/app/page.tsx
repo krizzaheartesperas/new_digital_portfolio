@@ -284,9 +284,45 @@ export default function Home() {
             {/* Left Column: Profile */}
             <aside className="lg:col-span-4 flex flex-col gap-6 lg:sticky lg:top-12 h-fit">
               <div className="relative w-full">
-              
-              {/* Editorial / Magazine Style Profile Banner */}
-              <div className="relative w-full aspect-[4/5] overflow-hidden rounded-[2.5rem] bg-slate-100 dark:bg-slate-950 shadow-lg ring-1 ring-slate-200/50 dark:ring-slate-800/50 group mb-6">
+
+              {/* MOBILE: Compact horizontal profile card */}
+              <div className="flex lg:hidden items-center gap-4 p-4 rounded-2xl bg-white/60 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/60 backdrop-blur-sm mb-4">
+                {/* Small circular avatar */}
+                <div className="flex-shrink-0 w-16 h-16 rounded-2xl overflow-hidden ring-2 ring-[#D4A017]/30">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={profile.avatar}
+                    alt={profile.name}
+                    className="w-full h-full object-cover object-center"
+                  />
+                </div>
+                {/* Name & details */}
+                <div className="flex-1 min-w-0">
+                  <h1 className="text-base font-black tracking-tight text-slate-950 dark:text-white leading-tight truncate">
+                    {profile.name}
+                  </h1>
+                  <p className="text-xs font-semibold text-[#D4A017] mt-0.5">{profile.title}</p>
+                  <div className="flex items-center gap-1 mt-1">
+                    <MapPin className="h-3 w-3 text-slate-400 flex-shrink-0" />
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400 truncate">{profile.location}</span>
+                  </div>
+                  {/* Social icons row */}
+                  <div className="flex gap-2 mt-2">
+                    {[
+                      { icon: (<svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>), url: profile.linkedin, label: "LinkedIn" },
+                      { icon: (<svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 24 24"><path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.579.688.481C19.137 20.162 22 16.418 22 12c0-5.523-4.477-10-10-10z" /></svg>), url: profile.github, label: "GitHub" },
+                      { icon: <Mail className="h-3.5 w-3.5" />, url: `mailto:${profile.email}`, label: "Email" }
+                    ].map((soc, i) => (
+                      <a key={i} href={soc.url} target="_blank" rel="noopener noreferrer"
+                        className="w-7 h-7 rounded-lg flex items-center justify-center bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white transition"
+                        title={soc.label}>{soc.icon}</a>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* DESKTOP: Editorial / Magazine Style Profile Banner */}
+              <div className="relative w-full aspect-[4/5] overflow-hidden rounded-[2.5rem] bg-slate-100 dark:bg-slate-950 shadow-lg ring-1 ring-slate-200/50 dark:ring-slate-800/50 group mb-6 hidden lg:block">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={profile.avatar}
@@ -304,12 +340,11 @@ export default function Home() {
                     <br />
                     <span className="text-slate-300">{profile.name.split(" ").slice(1).join(" ")}</span>
                   </h1>
-
                 </div>
               </div>
 
-              {/* Location & Socials Footer */}
-              <div className="flex flex-col gap-4 mt-6 px-2 w-full">
+              {/* Location & Socials Footer — Desktop only */}
+              <div className="hidden lg:flex flex-col gap-4 mt-6 px-2 w-full">
                 <div className="flex flex-col gap-2">
                   <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-500 dark:text-slate-400">
                     <MapPin className="h-3.5 w-3.5 text-slate-400 dark:text-slate-500" />
@@ -330,7 +365,6 @@ export default function Home() {
 
                 {/* Social Links Grid */}
                 <div className="flex gap-2 pt-3 border-t border-slate-200/20 dark:border-slate-800/30">
-
                   {[
                     { 
                       icon: (
@@ -350,7 +384,6 @@ export default function Home() {
                       url: profile.github, 
                       label: "GitHub" 
                     },
-
                     { icon: <Mail className="h-4.5 w-4.5" />, url: `mailto:${profile.email}`, label: "Email" }
                   ].map((soc, i) => (
                     <a
@@ -369,35 +402,34 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Mobile Navigation (Hidden on Desktop since Desktop uses the Fixed Sidebar) */}
-            <nav className="flex lg:hidden flex-col gap-2 mt-4 pt-4 border-t border-slate-200/50 dark:border-slate-800/50">
+            {/* Mobile Navigation — horizontal scrollable pill bar */}
+            <nav className="flex lg:hidden overflow-x-auto gap-2 pb-1 mt-4 pt-4 border-t border-slate-200/50 dark:border-slate-800/50 scrollbar-hide [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               {[
-                { id: "experience", label: "Experience", icon: <BriefcaseBusiness className="h-[18px] w-[18px]" /> },
-                { id: "credentials", label: "Credentials", icon: <GraduationCap className="h-[18px] w-[18px]" /> },
-                { id: "skills", label: "Skills", icon: <Cpu className="h-[18px] w-[18px]" /> },
-                { id: "projects", label: "Projects", icon: <LayoutGrid className="h-[18px] w-[18px]" /> },
-                { id: "about", label: "About Me", icon: <CircleUserRound className="h-[18px] w-[18px]" /> },
-                { id: "contact", label: "Contact", icon: <AtSign className="h-[18px] w-[18px]" /> }
+                { id: "experience", label: "Experience", icon: <BriefcaseBusiness className="h-4 w-4" /> },
+                { id: "credentials", label: "Credentials", icon: <GraduationCap className="h-4 w-4" /> },
+                { id: "skills", label: "Skills", icon: <Cpu className="h-4 w-4" /> },
+                { id: "projects", label: "Projects", icon: <LayoutGrid className="h-4 w-4" /> },
+                { id: "about", label: "About", icon: <CircleUserRound className="h-4 w-4" /> },
+                { id: "contact", label: "Contact", icon: <AtSign className="h-4 w-4" /> }
               ].map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`w-full py-3.5 px-4 rounded-[1.25rem] flex items-center justify-start gap-3.5 text-sm font-medium transition-all duration-300 cursor-pointer ${
+                  className={`flex-shrink-0 flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all duration-200 cursor-pointer ${
                     activeTab === tab.id
-                      ? "bg-[#1a1a1a] text-white dark:bg-white dark:text-[#1a1a1a] shadow-lg shadow-black/5"
-                      : "bg-transparent text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/50"
+                      ? "bg-[#1a1a1a] text-white dark:bg-white dark:text-[#1a1a1a] shadow-sm"
+                      : "bg-slate-100 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700"
                   }`}
                 >
                   {tab.icon}
                   {tab.label}
                 </button>
               ))}
-              
               <a
                 href={profile.resumeUrl}
-                className="w-full py-3.5 px-4 rounded-[1.25rem] flex items-center justify-start gap-3.5 text-sm font-medium transition-all duration-300 cursor-pointer bg-transparent text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/50"
+                className="flex-shrink-0 flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all duration-200 cursor-pointer bg-slate-100 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700"
               >
-                <ScrollText className="h-[18px] w-[18px]" />
+                <ScrollText className="h-4 w-4" />
                 Resume
               </a>
             </nav>
@@ -845,9 +877,8 @@ export default function Home() {
                         key={idx}
                         className="flex flex-col"
                       >
-                        <h3 className="text-sm font-bold text-slate-950 dark:text-white border-b border-slate-200/50 dark:border-slate-800/50 pb-2.5 mb-5 flex items-center justify-between">
+                        <h3 className="text-sm font-bold text-slate-950 dark:text-white border-b border-slate-200/50 dark:border-slate-800/50 pb-2.5 mb-5">
                           <span className="uppercase tracking-wider text-xs">{cat.category}</span>
-                          <span className="h-1.5 w-1.5 rounded-full bg-[#D4A017] shadow-[0_0_8px_rgba(20,184,166,0.8)]"></span>
                         </h3>
 
                         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3.5">
@@ -1042,7 +1073,7 @@ export default function Home() {
                     {/* Role Heading */}
                     <h3 className="text-base md:text-lg font-bold text-slate-950 dark:text-white flex items-center gap-2">
                       <Sparkles className="h-4 w-4 text-[#D4A017]" />
-                      Engineering solutions to real-world problems
+                      Turning ideas into reliable digital solutions
                     </h3>
 
                     {/* Bio text */}
@@ -1055,9 +1086,9 @@ export default function Home() {
                     {/* Stats List Cards */}
                     <div className="grid grid-cols-3 gap-4 border-t border-slate-200/80 dark:border-slate-800 pt-8 mt-8">
                       {[
-                        { label: "Years Experience", value: "5+" },
-                        { label: "Projects Completed", value: "25+" },
-                        { label: "Happy Clients", value: "15+" }
+                        { label: "Professional Internship", value: "1" },
+                        { label: "Projects Completed", value: "6+" },
+                        { label: "Awards & Recognitions", value: "2" }
                       ].map((stat, i) => (
                         <div key={i} className="text-center md:text-left rounded-xl p-4 bg-slate-50 dark:bg-slate-950/20 border border-slate-200/50 dark:border-slate-850">
                           <span className="block text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white bg-gradient-to-r from-[#D4A017] to-[#D4A017] dark:from-[#D4A017] dark:to-[#D4A017] bg-clip-text text-transparent">

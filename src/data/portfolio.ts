@@ -74,16 +74,16 @@ export const portfolioData: PortfolioData = {
     subTitle: "Building High-Performance Web Applications",
     avatar: "/profile.jpg",
     bio: [
-      "I am a passionate software engineer with 5+ years of experience designing and implementing scalable web applications, REST/GraphQL APIs, and cloud solutions.",
-      "Dedicated to writing clean, maintainable code, optimizing application performance, and crafting pixel-perfect, responsive user interfaces with modern frontend technologies.",
-      "When I'm not coding, I contribute to open-source projects, write technical articles, and mentor aspiring developers."
+      "I am a BS Information Technology graduate passionate about full-stack web development, software engineering, and building digital solutions that solve real-world problems.",
+      "During my internship at Highly Succeed Inc., I independently designed, developed, tested, and deployed a Human Resource Information System (HRIS) using TypeScript, Node.js, Supabase, PostgreSQL, and modern web technologies.",
+      "Beyond web development, I enjoy working on IoT-enabled applications, database systems, and responsive user interfaces. I continuously explore new technologies and improve my skills through personal projects, academic research, and collaborative software development."
     ],
     email: "krizzaheart.esperas@gmail.com",
     location: "Daet, Camarines Norte",
     github: "https://github.com/krizzaheartesperas",
     linkedin: "https://www.linkedin.com/in/krizza-heart-esperas-550ab9368?utm_source=share_via&utm_content=profile&utm_medium=member_android",
     twitter: "",
-    resumeUrl: "#"
+    resumeUrl: "/resume.pdf"
   },
   skillCategories: [
     {
