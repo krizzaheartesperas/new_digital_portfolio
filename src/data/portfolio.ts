@@ -169,6 +169,23 @@ export const portfolioData: PortfolioData = {
   ],
   projects: [
     {
+      id: "proj-workzen",
+      title: "Workzen HRIS – Human Resource Information System",
+      description: "Comprehensive HR platform designed to simplify employee and administrative operations.",
+      period: "February – May 2026",
+      role: "Full Stack Developer",
+      descriptionPoints: [
+        "Digital HR platform that brings employee and administrative functions into one system.",
+        "Human Resource Information System that enhances the management of employee and HR operations.",
+        "Modern HR platform developed to improve workforce and administrative management.",
+        "Integrated HR platform that supports efficient employee and organizational management.",
+        "Human Resource Information System built to digitize and organize core HR processes."
+      ],
+      image: "/workzen.png",
+      tags: ["JavaScript", "TypeScript", "Node.js", "Supabase", "Vercel"],
+      featured: true
+    },
+    {
       id: "proj-1",
       title: "TricyPay – Smart Transportation Management System",
       description: "Assisted in developing a smart transportation management system and IoT-enabled fare collection device as part of a group project.",

@@ -138,7 +138,7 @@ export default function Home() {
   }, [internshipImages.length]);
 
   // Contact form state
-  const [formData, setFormData] = useState({ name: "", email: "krizzaheart.esperas@gmail.com", subject: "", message: "" });
+  const [formData, setFormData] = useState({ name: "", email: "", subject: "", message: "" });
   const [contactStatus, setContactStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
 
   // Initialize theme from localStorage or system preference
@@ -157,8 +157,7 @@ export default function Home() {
     }
   }, []);
 
-  const toggleTheme = () => {
-    const newTheme = theme === "dark" ? "light" : "dark";
+  const applyTheme = (newTheme: "light" | "dark") => {
     setTheme(newTheme);
     localStorage.setItem("theme", newTheme);
     if (newTheme === "dark") {
@@ -166,6 +165,45 @@ export default function Home() {
     } else {
       document.documentElement.classList.remove("dark");
     }
+  };
+
+  const toggleTheme = (e?: React.MouseEvent) => {
+    const isDark = theme === "dark";
+    const newTheme = isDark ? "light" : "dark";
+
+    if (!document.startViewTransition || !e) {
+      applyTheme(newTheme);
+      return;
+    }
+
+    const x = e.clientX;
+    const y = e.clientY;
+    const endRadius = Math.hypot(
+      Math.max(x, window.innerWidth - x),
+      Math.max(y, window.innerHeight - y)
+    );
+
+    const transition = document.startViewTransition(() => {
+      applyTheme(newTheme);
+    });
+
+    transition.ready.then(() => {
+      const clipPath = [
+        `circle(0px at ${x}px ${y}px)`,
+        `circle(${endRadius}px at ${x}px ${y}px)`
+      ];
+
+      document.documentElement.animate(
+        {
+          clipPath: clipPath,
+        },
+        {
+          duration: 500,
+          easing: "ease-in-out",
+          pseudoElement: "::view-transition-new(root)",
+        }
+      );
+    });
   };
 
   const handleContactSubmit = async (e: React.FormEvent) => {
@@ -191,7 +229,7 @@ export default function Home() {
       const result = await response.json();
       if (result.success) {
         setContactStatus("success");
-        setFormData({ name: "", email: "krizzaheart.esperas@gmail.com", subject: "", message: "" });
+        setFormData({ name: "", email: "", subject: "", message: "" });
       } else {
         setContactStatus("error");
       }
@@ -224,16 +262,13 @@ export default function Home() {
 
       {/* FIXED LEFT SIDEBAR (Desktop Only) */}
       <aside className="hidden lg:flex flex-col w-[280px] fixed top-0 left-0 h-screen border-r border-slate-200/80 dark:border-slate-800/60 bg-white/60 dark:bg-slate-950/60 backdrop-blur-2xl z-50">
-        <div className="p-8 pb-6 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Sparkles className="h-6 w-6 text-slate-900 dark:text-white" />
-            <h2 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">Menu</h2>
-          </div>
+        <div className="relative p-8 pb-6 flex items-center justify-center w-full">
+          <h2 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">Menu</h2>
           
           {/* Theme Toggle in Sidebar */}
           <button
             onClick={toggleTheme}
-            className="p-2 rounded-[0.85rem] bg-white dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-900 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition duration-300 cursor-pointer shadow-sm"
+            className="absolute right-8 p-2 rounded-[0.85rem] bg-white dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-900 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition duration-300 cursor-pointer shadow-sm"
             aria-label="Toggle theme"
           >
             {theme === "dark" ? <Sun className="h-4.5 w-4.5" /> : <Moon className="h-4.5 w-4.5" />}
@@ -286,7 +321,16 @@ export default function Home() {
               <div className="relative w-full">
 
               {/* MOBILE: Compact horizontal profile card */}
-              <div className="flex lg:hidden items-center gap-4 p-4 rounded-2xl bg-white/60 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/60 backdrop-blur-sm mb-4">
+              <div className="relative flex lg:hidden items-center gap-4 p-4 rounded-2xl bg-white/60 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/60 backdrop-blur-sm mb-4">
+                {/* Theme toggle for mobile */}
+                <button
+                  onClick={toggleTheme}
+                  className="absolute top-4 right-4 p-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition cursor-pointer"
+                  aria-label="Toggle theme"
+                >
+                  {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+                </button>
+
                 {/* Small circular avatar */}
                 <div className="flex-shrink-0 w-16 h-16 rounded-2xl overflow-hidden ring-2 ring-[#D4A017]/30">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -297,14 +341,19 @@ export default function Home() {
                   />
                 </div>
                 {/* Name & details */}
-                <div className="flex-1 min-w-0">
+                <div className="flex-1 min-w-0 pr-10">
                   <h1 className="text-base font-black tracking-tight text-slate-950 dark:text-white leading-tight truncate">
                     {profile.name}
                   </h1>
                   <p className="text-xs font-semibold text-[#D4A017] mt-0.5">{profile.title}</p>
-                  <div className="flex items-center gap-1 mt-1">
-                    <MapPin className="h-3 w-3 text-slate-400 flex-shrink-0" />
-                    <span className="text-[10px] text-slate-500 dark:text-slate-400 truncate">{profile.location}</span>
+                  <div className="flex flex-col gap-1.5 mt-1.5">
+                    <div className="flex items-center gap-1">
+                      <MapPin className="h-3 w-3 text-slate-400 flex-shrink-0" />
+                      <span className="text-[10px] text-slate-500 dark:text-slate-400 truncate">{profile.location}</span>
+                    </div>
+                    <div className="inline-flex items-center text-[9px] font-bold text-[#D4A017] bg-[#D4A017]/10 dark:bg-[#D4A017]/5 px-1.5 py-0.5 rounded border border-[#D4A017]/15 w-fit">
+                      Willing to relocate for work
+                    </div>
                   </div>
                   {/* Social icons row */}
                   <div className="flex gap-2 mt-2">
@@ -682,7 +731,7 @@ export default function Home() {
                         <div>
                           <h4 className="text-base font-bold text-slate-950 dark:text-white leading-snug">University of Camarines Norte</h4>
                           <p className="text-sm font-semibold text-[#D4A017] dark:text-[#D4A017] mt-0.5">Bachelor of Science in Information Technology</p>
-                          <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 mt-1">GWA: <span className="text-[#D4A017] dark:text-[#D4A017] font-bold">1.6</span></p>
+                          <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 mt-1">GWA: <span className="text-green-600 dark:text-green-500 font-bold">1.6</span></p>
                         </div>
                       </div>
                       <span className="flex-shrink-0 inline-flex items-center gap-1.5 text-[11px] font-bold text-[#D4A017] dark:text-[#D4A017] bg-[#D4A017]/10 dark:bg-[#D4A017]/5 px-2.5 py-1 rounded-md border border-[#D4A017]/15 whitespace-nowrap w-fit">
@@ -707,7 +756,34 @@ export default function Home() {
                     </div>
 
                     <div className="flex flex-col gap-5">
-                      {/* Award 1: Best in Capstone */}
+                      {/* Award 1: Academic Distinction Awardee */}
+                      <div className="p-5 rounded-2xl border border-[#D4A017]/15 dark:border-[#D4A017]/10 bg-[#D4A017]/[0.03] dark:bg-[#D4A017]/[0.02]">
+                        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 mb-4">
+                          <div className="flex items-start gap-3">
+                            <div className="flex-shrink-0 mt-0.5 flex h-7 w-7 items-center justify-center rounded-lg bg-[#D4A017]/10 text-[#D4A017] border border-[#D4A017]/20">
+                              <svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                              </svg>
+                            </div>
+                            <h4 className="text-sm font-bold text-slate-950 dark:text-white leading-snug">Academic Distinction Awardee</h4>
+                          </div>
+                          <span className="flex-shrink-0 text-[11px] font-bold text-[#D4A017] dark:text-[#D4A017] bg-[#D4A017]/10 px-2.5 py-1 rounded-md border border-[#D4A017]/15 whitespace-nowrap w-fit">
+                            June 26, 2026
+                          </span>
+                        </div>
+                        <ul className="space-y-2.5 pl-10">
+                          {[
+                            "Recognized for outstanding academic performance and maintaining a high General Weighted Average (GWA) throughout the Information Technology program."
+                          ].map((point, i) => (
+                            <li key={i} className="flex items-start gap-2.5 text-slate-650 dark:text-slate-350 text-xs md:text-sm">
+                              <div className="flex-shrink-0 mt-[5px] h-2 w-2 rounded-full bg-slate-400 dark:bg-white shadow-[0_0_6px_rgba(148,163,184,0.7)] dark:shadow-[0_0_6px_rgba(255,255,255,0.7)]" />
+                              <span className="leading-relaxed">{point}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      {/* Award 2: Best in Capstone */}
                       <div className="p-5 rounded-2xl border border-[#D4A017]/15 dark:border-[#D4A017]/10 bg-[#D4A017]/[0.03] dark:bg-[#D4A017]/[0.02]">
                         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 mb-4">
                           <div className="flex items-start gap-3">
@@ -736,7 +812,7 @@ export default function Home() {
                         </ul>
                       </div>
 
-                      {/* Award 2: Special Citation */}
+                      {/* Award 3: Special Citation */}
                       <div className="p-5 rounded-2xl border border-[#D4A017]/15 dark:border-[#D4A017]/10 bg-[#D4A017]/[0.03] dark:bg-[#D4A017]/[0.02]">
                         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 mb-4">
                           <div className="flex items-start gap-3">
@@ -913,22 +989,7 @@ export default function Home() {
                     <h2 className="text-xl font-bold text-slate-950 dark:text-white">Featured Projects</h2>
                   </div>
 
-                  {/* Project Tag Filter Row */}
-                  <div className="flex flex-wrap gap-1.5 mb-6">
-                    {projectTags.map((tag) => (
-                      <button
-                        key={tag}
-                        onClick={() => setSelectedProjectTag(tag)}
-                        className={`rounded-lg px-3 py-1.5 text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer ${
-                          selectedProjectTag === tag
-                            ? "bg-slate-950 dark:bg-white text-white dark:text-slate-950 shadow-sm"
-                            : "bg-slate-50 dark:bg-slate-950 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 border border-slate-200 dark:border-slate-850"
-                        }`}
-                      >
-                        {tag}
-                      </button>
-                    ))}
-                  </div>
+
 
                   {/* Projects List */}
                   <div className="flex flex-col space-y-10 flex-1">
@@ -1115,20 +1176,20 @@ export default function Home() {
                     <h2 className="text-xl font-bold text-slate-950 dark:text-white">Get In Touch</h2>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-12 gap-8 flex-1">
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 flex-1">
                     {/* Details Column */}
-                    <div className="md:col-span-5 space-y-4">
+                    <div className="lg:col-span-5 space-y-4">
                       <div className="rounded-2xl border border-slate-200 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-950/20 p-5 space-y-5">
                         <h3 className="text-sm font-bold text-slate-950 dark:text-white mb-3">Contact Information</h3>
                         
                         {/* Email */}
-                        <div className="flex items-start gap-3">
+                        <div className="flex items-start gap-3 w-full">
                           <div className="flex-shrink-0 flex h-8 w-8 items-center justify-center rounded-lg bg-[#D4A017]/10 text-[#D4A017] border border-[#D4A017]/20">
                             <Mail className="h-4.5 w-4.5" />
                           </div>
-                          <div>
+                          <div className="min-w-0 flex-1">
                             <h4 className="text-xs font-bold text-slate-400 dark:text-slate-500">Email Me</h4>
-                            <a href={`mailto:${profile.email}`} className="text-xs md:text-sm text-[#D4A017] dark:text-[#D4A017] hover:underline mt-0.5 block break-all font-semibold">
+                            <a href={`mailto:${profile.email}`} className="text-[11px] lg:text-xs text-[#D4A017] dark:text-[#D4A017] hover:underline mt-0.5 block tracking-tight font-semibold whitespace-nowrap">
                               {profile.email}
                             </a>
                           </div>
@@ -1142,6 +1203,7 @@ export default function Home() {
                           <div>
                             <h4 className="text-xs font-bold text-slate-400 dark:text-slate-500">Location</h4>
                             <p className="text-xs md:text-sm text-slate-650 dark:text-slate-350 mt-0.5 font-medium">{profile.location}</p>
+                            <p className="text-[10px] md:text-[11px] font-bold text-[#D4A017] dark:text-[#D4A017] mt-1">Willing to relocate for work</p>
                           </div>
                         </div>
 
@@ -1159,7 +1221,7 @@ export default function Home() {
                     </div>
 
                     {/* Email Form Column */}
-                    <form onSubmit={handleContactSubmit} className="md:col-span-7 space-y-4">
+                    <form onSubmit={handleContactSubmit} className="lg:col-span-7 space-y-4">
                       <div className="flex flex-col gap-4">
                         <div>
                           <label htmlFor="form-name" className="block text-xs font-semibold text-slate-500 dark:text-slate-455 mb-1">Your Name</label>
@@ -1181,8 +1243,8 @@ export default function Home() {
                             required
                             value={formData.email}
                             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                            placeholder="krizzaheart.esperas@gmail.com"
-                            className="w-full text-[11px] px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-600 focus:border-[#D4A017] dark:focus:border-[#D4A017] focus:outline-none transition duration-200"
+                            placeholder="hello@example.com"
+                            className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-600 focus:border-[#D4A017] dark:focus:border-[#D4A017] focus:outline-none transition duration-200"
                           />
                         </div>
                       </div>
