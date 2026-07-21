@@ -74,9 +74,8 @@ export const portfolioData: PortfolioData = {
     subTitle: "Building High-Performance Web Applications",
     avatar: "/profile.jpg",
     bio: [
-      "I am a BS Information Technology graduate passionate about full-stack web development, software engineering, and building digital solutions that solve real-world problems.",
-      "During my internship at Highly Succeed Inc., I independently designed, developed, tested, and deployed a Human Resource Information System (HRIS) using TypeScript, Node.js, Supabase, PostgreSQL, and modern web technologies.",
-      "Beyond web development, I enjoy working on IoT-enabled applications, database systems, and responsive user interfaces. I continuously explore new technologies and improve my skills through personal projects, academic research, and collaborative software development."
+      "BS Information Technology graduate with a passion for Full-Stack Web Development and software engineering. I have hands-on experience developing a Human Resource Information System (HRIS) during my internship using TypeScript, Node.js, Supabase, and PostgreSQL, where I strengthened my skills in building real-world applications.",
+      "I am a continuous learner who enjoys solving problems, writing clean and maintainable code, and creating responsive, user-friendly web applications. I'm excited to contribute my skills, grow as a developer, and make a positive impact through technology."
     ],
     email: "krizzaheart.esperas@gmail.com",
     location: "Daet, Camarines Norte",
@@ -237,6 +236,13 @@ export const portfolioData: PortfolioData = {
     }
   ],
   certifications: [
+    {
+      id: "cert-hsi-ojt",
+      title: "Certificate of Completion - HSI On-the-Job Training Program (486 Hours)",
+      issuer: "Highly Succeed Inc.",
+      date: "May 2026",
+      image: "/cert-hsi-ojt.jpg"
+    },
     {
       id: "cert-1",
       title: "Networking Basics",
