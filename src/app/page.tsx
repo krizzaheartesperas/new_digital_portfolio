@@ -309,8 +309,34 @@ export default function Home() {
         </nav>
       </aside>
 
+      {/* MOBILE BOTTOM NAVIGATION (Visible only on mobile) */}
+      <nav className="lg:hidden fixed bottom-4 left-4 right-4 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-slate-200/80 dark:border-white/10 rounded-2xl shadow-xl shadow-black/10 z-50 p-2 flex items-center justify-between overflow-x-auto gap-1">
+        {[
+          { id: "home", icon: <HomeIcon className="h-5 w-5" /> },
+          { id: "experience", icon: <BriefcaseBusiness className="h-5 w-5" /> },
+          { id: "credentials", icon: <GraduationCap className="h-5 w-5" /> },
+          { id: "skills", icon: <Cpu className="h-5 w-5" /> },
+          { id: "projects", icon: <LayoutGrid className="h-5 w-5" /> },
+          { id: "about", icon: <CircleUserRound className="h-5 w-5" /> },
+          { id: "contact", icon: <AtSign className="h-5 w-5" /> }
+        ].map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            className={`p-3 rounded-xl flex-shrink-0 flex items-center justify-center transition-all duration-300 ${
+              activeTab === tab.id
+                ? "bg-[#D4A017] text-slate-950 shadow-md transform -translate-y-1"
+                : "text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800"
+            }`}
+            aria-label={tab.id}
+          >
+            {tab.icon}
+          </button>
+        ))}
+      </nav>
+
       {/* MAIN CONTENT WRAPPER */}
-      <div className="flex-1 lg:ml-[280px] flex flex-col min-h-screen relative w-full">
+      <div className="flex-1 lg:ml-[280px] flex flex-col min-h-screen relative w-full pb-24 lg:pb-0">
         {/* Main Container Layout */}
         <main className={`mx-auto w-full flex-grow flex flex-col transition-all duration-300 ${
           activeTab === "home"

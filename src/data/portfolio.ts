@@ -202,6 +202,24 @@ export const portfolioData: PortfolioData = {
       featured: true
     },
     {
+      id: "proj-tb-sim",
+      title: "Agent-Based Simulation and GIS Mapping of Tuberculosis Transmission",
+      description: "Developed an agent-based simulation integrated with GIS to analyze TB transmission patterns and support forecasting for public health assessment.",
+      period: "December 2024",
+      role: "Agent-Based Simulation Developer / Modeler",
+      location: "Daet, Camarines Norte",
+      descriptionPoints: [
+        "Developed an agent-based simulation integrated with GIS to analyze TB transmission patterns.",
+        "Mapped and identified high-prevalence barangays, including Alawihao and Bibirao.",
+        "Modeled key factors such as mobility rates, infection probability, and healthcare accessibility.",
+        "Supported forecasting and data-driven insights for public health assessment."
+      ],
+      image: "/tb-simulation.png",
+      tags: ["Agent-Based Modeling", "GIS Mapping", "Simulation", "Data Analysis", "Public Health"],
+      featured: true,
+      demoUrl: "https://zenodo.org/records/14496751"
+    },
+    {
       id: "proj-2",
       title: "Autonomous Egg Quality Sorting System Using IoT & Image Processing",
       description: "Participated in building an IoT-powered egg sorting system using Raspberry Pi and image processing for automated size, quality, and shape grading.",
